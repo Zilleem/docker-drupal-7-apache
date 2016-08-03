@@ -19,10 +19,11 @@ path of /solr/drupal
 
 SSH into your d7 container by listing the containers
 > docker ps
+
 Use the container id to execute bash in the container
 > docker exec -it YOUR_DOCKER_ID /bin/bash
 
-User Drush inside the container within htdocs to import your sql file
+Use Drush inside the container within htdocs to import your sql file
 > drush sqlc < ../import.sql
 
 Nagivate to localhost in your browser and/or localhost:8983/solr/# for the solr admin
