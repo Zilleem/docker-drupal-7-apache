@@ -1,0 +1,29 @@
+version: '2'
+services:
+  d7:
+    image: zilleem-d7:latest
+    volumes:
+      - $PWD/htdocs:/var/www/html
+    ports:
+      - "80:80"
+    links:
+      - db
+      - redis
+      - solr
+  db:
+    image: mysql
+    volumes:
+      - $PWD/mysql/:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: drupal
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
+  redis:
+    image: redis:2.8
+    ports:
+      - "6379"
+  solr:
+    build: solr/
+    ports:
+      - "8983:8983"
