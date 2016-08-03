@@ -1,0 +1,6 @@
+# Ignore OS files
+.DS_store
+
+# Ignore Docker Volumes and htdocs
+htdocs/*
+mysql/*
