@@ -1,8 +1,7 @@
 FROM php:5.6-apache
 MAINTAINER Steven Williams <steven@zilleem.com>
-RUN a2enmod rewrite
 
-run apt-get update
+RUN apt-get update
 RUN apt-get install -y \
 	vim \
 	nano \
@@ -18,13 +17,13 @@ RUN gem update system
 RUN gem install compass
 RUN npm install -g bower grunt-cli
 
-# install the PHP extensions we need (git for Composer, mysql-client for mysqldump)
+# Install the PHP extensions we need (git for Composer, mysql-client for mysqldump)
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libpq-dev git mysql-client-5.5 wget \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
-	&& docker-php-ext-install gd mbstring opcache pdo pdo_mysql pdo_pgsql zip
+	&& docker-php-ext-install gd mbstring opcache mysql mysqli pdo pdo_mysql pdo_pgsql zip
 
-# set recommended PHP.ini settings
+# Set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
 		echo 'opcache.memory_consumption=128'; \
@@ -37,7 +36,7 @@ RUN { \
 
 WORKDIR /root
 
-#Configure PHP memory limit
+# Configure PHP memory limit
 RUN {  \
 		echo "memory_limit = 256M"; \
 	} >> /usr/local/etc/php/php.ini
@@ -45,14 +44,23 @@ RUN {  \
 # Update the default apache site with the config we created.
 ADD apache-config.conf /etc/apache2/sites-enabled/000-default.conf
 
-#Install Drush 8.1.2
+# Install Drush 8.1.2
 RUN wget https://github.com/drush-ops/drush/releases/download/8.1.2/drush.phar && php drush.phar core-status && chmod +x drush.phar \
 	&& mv drush.phar /usr/local/bin/drush
 
-#Install Drupal Console
+# Install Drupal Console
 RUN curl http://drupalconsole.com/installer -L -o drupal.phar
 RUN mv drupal.phar /usr/local/bin/drupal && chmod +x /usr/local/bin/drupal
-RUN drupal init
 
+# Add composer
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+
+# Add user to group for volume sharing 
+RUN groupadd 1000
+RUN usermod -a -G 1000 www-data
+RUN usermod -a -G staff www-data
+
+RUN a2enmod rewrite
 
 WORKDIR /var/www/html

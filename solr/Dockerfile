@@ -1,5 +1,4 @@
-
-FROM makuk66/docker-solr:5.0
+FROM solr:5-alpine
 
 # We just add a core with the search_api_solr config to the
 # base image here.

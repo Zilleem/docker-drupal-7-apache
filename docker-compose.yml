@@ -1,9 +1,9 @@
 version: '2'
 services:
   d7:
-    image: zilleem-d7:latest
+    build: .
     volumes:
-      - $PWD/htdocs:/var/www/html
+      - $PWD/html:/var/www/html
     ports:
       - "80:80"
     links:
