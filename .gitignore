@@ -3,4 +3,5 @@
 
 # Ignore Docker Volumes and htdocs
 htdocs/*
+html/*
 mysql/*
