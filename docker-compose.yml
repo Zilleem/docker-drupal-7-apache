@@ -2,6 +2,7 @@ version: '2'
 services:
   d7:
     build: .
+    image: zilleem-d7:1 
     volumes:
       - $PWD/html:/var/www/html
     ports:
