@@ -1,5 +1,5 @@
-# docker-drupal-7-apache
-Build a Drupal 7 environment with docker containers for apache, mysql, solr and redis.
+# docker-wordpress-php5.6-apache
+Build a wordpress environment with docker containers for apache, mysql, solr and redis.
 
 This repository contains a custom image from the php:5.6-apache docker image.
 If you do not already have this docker image built it will build on your
@@ -11,21 +11,22 @@ Next you can start your stack with the docker-compose command
 If you do not already have a mysql and html folder they will be created.
 You can now add our drupal code base to the html folder.
 
-Configure your settings file with MySQL, Redis and Solr.
+Configure your settings file with MySQL, and Redis.
 Mysql will use the host as "db" and the database and
 user info defined in the docker-compose file.
-Redis has port 6375 and Solr is host "solr" with 
-path of /solr/drupal
+Redis uses port 6375.
 
-SSH into your d7 container by listing the containers
+SSH into your wordpress container by listing the containers
 > docker ps
 
 Use the container id to execute bash in the container
 > docker exec -it YOUR_DOCKER_ID /bin/bash
 
-Use Drush inside the container within htdocs to import your sql file
-> drush sqlc < import.sql
+Importing db from outside the container
+> docker exec -i CONTAINERNAME mysql -u root -pmysql wordpress < ./backup.sql
 
-Nagivate to localhost in your browser and/or localhost:8983/solr/# for the solr admin
+Use wp-cli commands via 'docker exec'. For example, to install and activate the Quark theme:
 
+> docker exec <containername> wp theme install quark
+> docker exec <containername> wp theme activate quark
 
