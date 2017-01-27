@@ -1,7 +1,11 @@
 FROM php:5.6-apache
 MAINTAINER Steven Williams <steven@zilleem.com>
+RUN a2enmod rewrite
 
-RUN apt-get update
+# Add www-data user
+RUN usermod -u 33 www-data
+
+run apt-get update
 RUN apt-get install -y \
 	vim \
 	nano \
@@ -12,10 +16,6 @@ RUN apt-get install -y \
 	nodejs \
 	npm \
 	curl
-
-RUN gem update system 
-RUN gem install compass
-RUN npm install -g bower grunt-cli
 
 # Install the PHP extensions we need (git for Composer, mysql-client for mysqldump)
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libpq-dev git mysql-client-5.5 wget \
@@ -55,6 +55,11 @@ RUN mv drupal.phar /usr/local/bin/drupal && chmod +x /usr/local/bin/drupal
 # Add composer
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
+
+# Add wp-cli
+# source: http://wp-cli.org/
+##
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mv wp-cli.phar /usr/bin/wp-cli && chown www-data:www-data /usr/bin/wp-cli
 
 # Add user to group for volume sharing 
 RUN groupadd 1000
