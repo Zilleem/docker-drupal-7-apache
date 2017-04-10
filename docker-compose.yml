@@ -1,25 +1,25 @@
 version: '2'
 services:
-  wp:
+  cms:
     build: .
-    image: zilleem-wp:1.0
+    image: zilleem-cms:1.0
     volumes:
       - $PWD/html:/var/www/html
     ports:
-      - "8082:80"
+      - "80:80"
     links:
       - db
-      - redis
+#      - redis
   db:
     image: mysql
     volumes:
       - $PWD/mysql/:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: mysql
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
-  redis:
-    image: redis:2.8
-    ports:
-      - "6379"
+      MYSQL_DATABASE: cms
+      MYSQL_USER: cms
+      MYSQL_PASSWORD: cms
+#  redis:
+#    image: redis:2.8
+#    ports:
+#      - "6379"
